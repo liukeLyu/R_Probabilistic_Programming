@@ -1,0 +1,20 @@
+// Exponential with [1,20] bound, using factor
+// var data = [1.5, 2, 3, 4, 5, 12]
+var dataMean = listMean(data)
+
+var factorMore = function(dist, data) {
+  map(function(d){factor(dist.score(d))}, data)
+}
+
+var model = function() {
+  var a = Uniform({a:0, b:1}).sample();
+  var normScore = -Math.log(Math.exp(-a) - Math.exp(-20*a))
+  var dist = Exponential({a:a})
+  factorMore(dist, data)
+  factor(normScore * data.length)
+  return a;
+}
+
+var d = Infer({method: 'SMC', particles:10000}, model);
+console.log(expectation(d))
+d
